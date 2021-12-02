@@ -1,6 +1,6 @@
 <?php
 
-class Barang_model extends CI_Model
+class Report_model extends CI_Model
 {
 
     //GET
@@ -47,7 +47,7 @@ class Barang_model extends CI_Model
 
     public function createReport($data)
     {
-        $this->db->insert('barang', $data);
+        $this->db->insert('report', $data);
         return $this->db->affected_rows();
     }
 
