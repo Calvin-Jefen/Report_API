@@ -44,6 +44,13 @@ class Report_model extends CI_Model
         return $this->db->affected_rows(); //berapa baris yang terpengaruhi di db
     }
 
+    public function updateBarang($data, $id)
+    {
+        $this->db->update('barang', $data, ['kd_barang' => $id]);
+        return $this->db->affected_rows();
+    }
+
+
 
     public function createReport($data)
     {
@@ -51,10 +58,8 @@ class Report_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-
-    public function updateBarang($data, $id)
+    public function checkreport($data)
     {
-        $this->db->update('barang', $data, ['kd_barang' => $id]);
-        return $this->db->affected_rows();
+        return $this->db->query("SELECT report FROM report where report= '$data' ")->result_array();
     }
 }

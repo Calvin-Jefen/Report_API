@@ -114,10 +114,17 @@ class Report extends REST_Controller
         ];
 
         if ($this->report->createReport($data) > 0) {
-            $this->response([
-                'status' => TRUE,
-                'message' => 'Report received !'
-            ], REST_Controller::HTTP_CREATED);
+            if ($data != $this->report->checkReport($data)) {
+                $this->response([
+                    'status' => TRUE,
+                    'message' => 'Report received !'
+                ], REST_Controller::HTTP_CREATED);
+            } else {
+                $this->response([
+                    'status' => FALSE,
+                    'message' => 'report already exist!'
+                ], REST_Controller::HTTP_BAD_REQUEST);
+            }
         } else {
             $this->response([
                 'status' => FALSE,
