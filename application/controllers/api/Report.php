@@ -20,28 +20,6 @@ class Report extends REST_Controller
 
     //GET
 
-    public function index_get()
-    {
-
-        $id = $this->get('kd_barang');
-        if ($id === null) {
-            $barang = $this->barang->getBarang();
-        } else {
-            $barang = $this->barang->getBarang($id);
-        }
-
-        if ($barang) {
-            $this->response([
-                'status' => TRUE,
-                'data' => $barang
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'status' => FALSE,
-                'message' => 'id not found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
-    }
 
     public function kdBarang_get()
     {
@@ -109,12 +87,21 @@ class Report extends REST_Controller
 
     public function index_post()
     {
+
+        //get input
         $data = [
+            'user_id' => $this->post('user_id'),
+            'report_date' => date('Y-m-d'),
             'report' => $this->post('report'),
+
         ];
 
-        if ($this->report->createReport($data) > 0) {
-            if ($data != $this->report->checkReport($data)) {
+        //check duplicate data
+        $is_exist = $this->report->checkreport($data);
+        //if not exist
+        if ($is_exist == 0) {
+            //insert report
+            if ($this->report->createReport($data) > 0) {
                 $this->response([
                     'status' => TRUE,
                     'message' => 'Report received !'
@@ -122,18 +109,59 @@ class Report extends REST_Controller
             } else {
                 $this->response([
                     'status' => FALSE,
-                    'message' => 'report already exist!'
+                    'message' => 'report failed!'
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         } else {
             $this->response([
                 'status' => FALSE,
-                'message' => 'report failed!'
+                'message' => 'report exist!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
+    public function index_get()
+    {
 
+        $id = $this->get('user_id');
+        $report = $this->report->getReport($id);
+        $user = $this->report->getUser($id);
 
+        if ($report) {
+            $this->response([
+                'status' => TRUE,
+                'data' => [
+                    'user' => $user,
+                    'report' => $report
+                ]
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'data not found'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function fwords_get()
+    {
+        $id = $this->get('user_id');
+        $fwords = $this->report->getFwords($id);
+        $user = $this->report->getUser($id);
+
+        if ($fwords) {
+            $this->response([
+                'status' => TRUE,
+                'data' => [
+                    'fwords' => $fwords
+                ]
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'data not found'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+    }
 
     // public function index_put()
     // {

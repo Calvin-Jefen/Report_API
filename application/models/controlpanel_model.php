@@ -1,8 +1,24 @@
 <?php
 
-class Report_model extends CI_Model
+class controlpanel_model extends CI_Model
 {
+    public function getWebData()
+    {
+        $url = base_url('api/user');
+        $data = ['name' => 'Hardik', 'email' => 'itsolutionstuff@gmail.com'];
 
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type:application/json',
+            'keyapipenjualan: p3nju4l4n',
+        ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        var_dump($result);
+    }
     //GET
 
     public function getBarang($id = null)
@@ -76,8 +92,7 @@ class Report_model extends CI_Model
 
     public function getReport($id)
     {
-        $today = date('Y-m-d');
-        return $this->db->query("SELECT report FROM report WHERE user_id ='$id' AND report_date = '$today'")->result_array();
+        return $this->db->get_where('report', ['user_id' => $id])->result_array();
     }
 
     public function getFwords($id)
