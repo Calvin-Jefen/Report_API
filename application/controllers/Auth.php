@@ -60,8 +60,7 @@ class Auth extends CI_Controller
         $this->form_validation->set_rules(
             'email',
             'Email',
-            'required|trim|valid_email|is_unique[users.user_email]',
-            ['is_unique' => 'This email has been registered !']
+            'required|trim|valid_email|callback_email_exist|callback_email_active'
         );
         $this->form_validation->set_rules(
             'password',
@@ -78,7 +77,6 @@ class Auth extends CI_Controller
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/cpregistration');
         } else {
-
             $uname = htmlspecialchars($this->input->post('username', true));
             $email = htmlspecialchars($this->input->post('email', true));
             $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
@@ -86,22 +84,36 @@ class Auth extends CI_Controller
             $data = [
                 'user_name' => $uname,
                 'user_email' => $email,
-                'password' => $password
+                'password' => $password,
+                'is_active' => "1"
             ];
-            $this->db->insert('users', $data);
+            $this->db->where('user_email', $email);
+            $this->db->update('users', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success text-center" role="alert">
             Account Registered ! Please login.</div>');
             redirect('auth');
         }
     }
 
-    public function email_exists($key)
+    public function email_exist($key)
     {
         $this->db->where('user_email', $key);
-        $query = $this->db->get('user_email');
+        $query = $this->db->get('users');
         if ($query->num_rows() > 0) {
             return true;
         } else {
+            $this->form_validation->set_message('email_exist', 'Email has not been registered !');
+            return false;
+        }
+    }
+    public function email_active($key)
+    {
+        $this->db->where('user_email', $key)->where('is_active', "0");
+        $query = $this->db->get('users');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            $this->form_validation->set_message('email_active', 'Email has been activated !');
             return false;
         }
     }

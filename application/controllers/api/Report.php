@@ -18,72 +18,6 @@ class Report extends REST_Controller
         //$this->methods['index_get']['limit'] = 100;
     }
 
-    //GET
-
-
-    public function kdBarang_get()
-    {
-
-        $barang = $this->barang->getKodeBarang();
-
-        if ($barang) {
-            $this->response([
-                'status' => TRUE,
-                'data' => $barang
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'status' => FALSE,
-                'message' => 'kd_barang not found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
-    }
-
-    public function stokBarang_get()
-    {
-
-        $barang = $this->barang->getStokBarang();
-
-        if ($barang) {
-            $this->response([
-                'status' => TRUE,
-                'data' => $barang
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'status' => FALSE,
-                'message' => 'stok barang not found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
-    }
-
-    //AKHIR GET
-
-    // public function index_delete()
-    // {
-    //     $id = $this->delete('kd_barang');
-
-    //     if ($id === null) {
-    //         $this->response([
-    //             'status' => FALSE,
-    //             'message' => 'provide an id'
-    //         ], REST_Controller::HTTP_NO_CONTENT);
-    //     } else {
-    //         if ($this->barang->deleteBarang($id) > 0) {
-    //             $this->response([
-    //                 'status' => TRUE,
-    //                 'id' => $id,
-    //                 'message' => 'deleted'
-    //             ], REST_Controller::HTTP_BAD_REQUEST);
-    //         } else {
-    //             $this->response([
-    //                 'status' => FALSE,
-    //                 'message' => 'id not found!'
-    //             ], REST_Controller::HTTP_BAD_REQUEST);
-    //         }
-    //     }
-    // }
-
 
     public function index_post()
     {
@@ -119,6 +53,8 @@ class Report extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
+
+
     public function index_get()
     {
 

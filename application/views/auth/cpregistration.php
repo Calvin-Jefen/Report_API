@@ -21,7 +21,7 @@
                 </div>
                 <div class="mb-3 row" style="margin-top: 10px;">
                     <label for="inputemail" class="col-sm-3 col-form-label">
-                        <h5>Your active email :</h5>
+                        <h5>Registered email :</h5>
                     </label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="inputEmail" name="email" style="margin-top: 1%;" value=" <?= set_value('email') ?> ">

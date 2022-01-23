@@ -76,12 +76,6 @@ class Report_model extends CI_Model
 
     public function getReport($id)
     {
-        $today = date('Y-m-d');
-        return $this->db->query("SELECT report FROM report WHERE user_id ='$id' AND report_date = '$today'")->result_array();
-    }
-
-    public function getFwords($id)
-    {
-        return $this->db->query("SELECT Blacklisted_words FROM users WHERE user_id ='$id'")->result_array();
+        return $this->db->query("SELECT report FROM report WHERE user_id ='$id'")->result_array();
     }
 }
